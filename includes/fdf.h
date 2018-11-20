@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 14:44:48 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/20 12:15:34 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:28:32 by rlucas-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # define CYAN   0X00FFFF
 # define BLACK  0X000000
 # define WHITE  0XFFFFFF
-
  /*couleur bonus*/
 # define DARK_BROWN 0X654321
 # define ELECTRIC_BLUE 0X7DF9FF
@@ -38,8 +37,7 @@
 # define OLIVE 0XBAB86C
 # define ORANGE 0XFFA500
 # define PINE_GREEN 0X01796F
-
-#include <fcntl.h>
+ #include <fcntl.h>
 #include "../GNL/get_next_line.h"
 #include <mlx.h>
  typedef struct	s_coord
@@ -102,5 +100,6 @@ t_line		*init_map(t_window window, int fd, float *zoom);
 void		ft_color(t_line *lst_map);
 int		ft_select_increment(t_coord	point);
 int		ft_fix_color(t_coord point);
+float	calcul_zoom(t_line *lst_map);
 
  #endif

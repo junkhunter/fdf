@@ -41,9 +41,9 @@ void	make_titre(t_window window)
 	img.data = (int *)mlx_get_data_addr(img.img, &img.bpp, &img.size, &img.a);
 	img.a = 0;
 	while (img.a < 2550 * 100)
-		img.data[img.a++] = 0XFFFFFF;
+		img.data[img.a++] = GRAY;
 	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, img.img, 0, 0);
-	mlx_string_put(window.mlx_ptr, window.win_ptr, W_SIZEX / 2 - (ft_strlen("FDF")/2 * 10), 45, ELECTRIC_ULTRAMARINE, "FDF");
+	mlx_string_put(window.mlx_ptr, window.win_ptr, W_SIZEX / 2 - (ft_strlen("FDF")/2 * 10), 45, DARK_BROWN, "FDF");
 }
 
 int		main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 10:43:22 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/20 03:31:38 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:28:24 by rlucas-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <math.h>
@@ -85,10 +85,10 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 	mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color);
 	inc = (point2.alt > 128 || point2.alt < 0) ?
 	ft_select_increment(point2) : -0X000002;
-	//d_color = delta_color(point1.color, point2.color, inc, size_l);	
+	//d_color = delta_color(point1.color, point2.color, inc, size_l);
 	d_color = point1.color > point2.color;
-	if (d_color)
-		printf ("%d\n",d_color);
+	//if (d_color)
+	//	printf ("%d\n",d_color);
 	//if ((point1.color != point2.color) || (d_color = 0))
 	//	d_color = /*(size_l / */(point2.color - point1.color)/*)*/ / inc;
 	if (var.dx > var.dy)
@@ -105,16 +105,13 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 				var.erreur -= var.dx;
 				point1.y += var.yincr;
 			}
-			if (point2.alt > 256 * 2)
+			if (point2.alt > 255 * 2)
 				point1.color = 0XFFFFFF;
-			/*if (d_color)
-			{
-				if (point2.alt != point1.alt && point1.color > point2.color*/ /* && (!d_color || !(var.e % d_color))*//*)
-					point1.color += inc;
-			}
-			else
-				if (point2.alt != point1.alt && point1.color < point2.color)
-					point1.color += inc;*/
+			//if ()
+			//	point1.color += inc;
+			//else
+			//	if (point2.alt != point1.alt && point1.color < point2.color)
+			//		point1.color += inc;*/
 			//if (point1.color > point2.color)
 			//	point1.color = point2.color;
 
@@ -129,9 +126,6 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 			var.erreur += var.dx;
 			if (var.erreur > var.dy)
 			{
-			//	if (point2.alt != point1.alt && point2.alt > -255)
-			//		if (size_l <= 255 || (var.e % 2 == 0))
-			//			point1.color += inc;
 				var.erreur -= var.dy;
 				point1.x += var.xincr;
 			}

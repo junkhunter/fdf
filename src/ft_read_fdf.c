@@ -6,7 +6,7 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 23:07:37 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/20 15:23:18 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:28:19 by rlucas-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,26 @@ char		**ft_read_fdf(int fd)
 
 float	calcul_zoom(t_line *lst_map)
 {
-	while (++i < lst_map->size)
-	{
+	int i;
+	int max;
+	float zoom;
 
-	}
+	i = -1;
+	max = 1;
+	while (lst_map)
+	{
+		i = -1;
+		while (++i < lst_map->size)
+		{
+			lst_map->point[i].alt = ft_atoi(lst_map->tab[i]);
+			if (abs(lst_map->point[i].alt) >= max)
+				max = abs(lst_map->point[i].alt);
+		}
+		lst_map = lst_map->next;
+}
+	zoom = 150 / max;
+	if (zoom < 1)
+		zoom = 1;
 	return (zoom);
 }
 
@@ -65,7 +81,7 @@ t_line		*init_map(t_window window, int fd, float *zoom)
 		tmp = lst_map;
 		lst_map = lst_map->next;
 	}
-	*zoom = calcul_zoom(begin_lst);
+	//*zoom = calcul_zoom(begin_lst);
 	printf("ecart %d\n",(int)(ecart));
 	free(lst_map);
 	tmp->next = NULL;
