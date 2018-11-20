@@ -47,6 +47,7 @@
 	int					alt;
 	unsigned int		color;
 }				t_coord;
+
  typedef struct	s_line
 {
 	char			**tab;
@@ -57,11 +58,13 @@
 	unsigned int	ecart;
 	unsigned int	zoom;
 }				t_line;
+
  typedef struct	s_window
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
 }				t_window;
+
  typedef struct	s_param
 {
 	t_line			*map;
@@ -70,6 +73,7 @@
 	float	zoom;
 	double			b;
 }				t_param;
+
  typedef struct	s_var_draw
 {
 	int     dx;
@@ -79,6 +83,7 @@
 	int     erreur;
 	int     e;
 }				t_var_draw;
+
  typedef	struct	s_image
 {
 	void		*img;
@@ -87,6 +92,7 @@
 	int			bpp;
 	int			a;
 }				t_image;
+
  int			get_next_line(const int fd, char **line);
 int			deal_key(int key, void *param);
 int			deal_mouse(int button, int x, int y, void *param);

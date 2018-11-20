@@ -46,7 +46,6 @@ int			deal_key(int key, void *param)
 	{
 		if (((t_line*)param)->zoom > 0 || key == 126)
 			((t_line*)param)->zoom += -1 + ((key - 125) * 2);
-		printf("zoom -> %d\n",((t_line*)param)->zoom);
 		//calcul_point(param, ((t_line*)param)->zoom, ((t_line*)param)->ecart);
 	}
 	/*else if (key == 125)

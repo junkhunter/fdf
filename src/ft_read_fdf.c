@@ -72,7 +72,6 @@ t_line		*init_map(t_window window, int fd, float *zoom)
 		lst_map->size = 0;
 		while (lst_map->tab[lst_map->size]) //taille de la ligne
 			lst_map->size++;
-		//printf("calcul (%d * %d) %d > %d\n", ecart, lst_map->size, lst_map->size * ecart, SIZE_MINX);
 		if (ecart * lst_map->size > SIZE_MINY &&
 			 ecart * lst_map->size > SIZE_MINX)
 			ecart = ((SIZE_MINY < SIZE_MINX) ? SIZE_MINX : SIZE_MINY) / (lst_map->size + 1);
@@ -81,8 +80,6 @@ t_line		*init_map(t_window window, int fd, float *zoom)
 		tmp = lst_map;
 		lst_map = lst_map->next;
 	}
-	//*zoom = calcul_zoom(begin_lst);
-	printf("ecart %d\n",(int)(ecart));
 	free(lst_map);
 	tmp->next = NULL;
 	calcul_point(begin_lst, ecart / 2, zoom);

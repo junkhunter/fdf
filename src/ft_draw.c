@@ -47,6 +47,7 @@ void    draw_sqrt(t_window window, t_line *lst_map)
 		}
 		lst_map = lst_map->next;
 	}
+
 }
 
 void		init_var_draw(t_var_draw *var, t_coord point1, t_coord point2, int *size_l)
@@ -56,7 +57,7 @@ void		init_var_draw(t_var_draw *var, t_coord point1, t_coord point2, int *size_l
 	var->xincr = (point1.x < point2.x) ? 1 : -1;
 	var->yincr = (point1.y < point2.y) ? 1 : -1;
 	var->erreur = (var->dx > var->dy) ? var->dx / 2 : var->dy /2;
-	var->e = 0;	
+	var->e = 0;
 	*size_l = sqrt(pow(var->dx, 2) + pow(var->dy, 2));
 }
 
@@ -82,7 +83,7 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 	int			d_color;
 
 	init_var_draw(&var, point1, point2, &size_l);
-	mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color);
+	mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color); //put image 
 	inc = (point2.alt > 128 || point2.alt < 0) ?
 	ft_select_increment(point2) : -0X000002;
 	//d_color = delta_color(point1.color, point2.color, inc, size_l);
@@ -140,6 +141,4 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 			mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color);
 		}
 	}
-	if (var.e != size_l)
-		printf("%d %d\n",var.e, size_l);
 }
