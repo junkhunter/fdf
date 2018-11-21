@@ -97,7 +97,7 @@ typedef	struct	s_image
 typedef struct	s_all
 {
 	t_param		tt;
-	void		*image;
+	t_image		image;
 	t_window	wdw;
 }				t_all;
 

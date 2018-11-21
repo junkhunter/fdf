@@ -46,7 +46,16 @@ static void		make_title(t_window window)
 	mlx_string_put(window.mlx_ptr, window.win_ptr, W_SIZEX / 2 - (ft_strlen("FDF")/2 * 10), 35, BLACK, "FDF");
 }
 
-int			main(int argc, char **argv)
+/*void					putimg(t_image image, t_window window, t_line *lst_map)
+{
+	image.data = (int *)mlx_get_data_addr(image.img, &image.bpp, &image.size, &image.a);
+	image.a = 0;
+	while (image.a < 1)
+		image.data[image.a++] = lst_map->point->color;
+	mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.img, lst_map->point->x, lst_map->point->y);
+}*/
+
+int						main(int argc, char **argv)
 {
 	int		fd;
 	float zoom;
@@ -62,7 +71,7 @@ int			main(int argc, char **argv)
 	if (!(all.tt.map = init_map(all.wdw, fd, &zoom)))
 		return (write(1, "<file error>\n", 13) & 0);
 	draw_sqrt(all.wdw, all.tt.map);
-	//putimg(all.tt.);
+	//putimg(all.image, all.wdw, all.tt.map);
 	make_title(all.wdw);
 	mlx_key_hook(all.wdw.win_ptr, deal_key, (void *)0);
 	//mlx_mouse_hook(window.win_ptr, deal_mouse, tt);

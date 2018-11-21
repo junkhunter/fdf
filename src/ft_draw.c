@@ -81,9 +81,19 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 	int			inc;
 	int			size_l;
 	int			d_color;
+	t_all		image;
 
 	init_var_draw(&var, point1, point2, &size_l);
-	mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color); //put image
+	//mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color); //put image
+	//mlx_new_image(window.mlx_ptr, 1, ,1);
+
+	image.image.img = mlx_new_image(window.mlx_ptr, 1, 1);
+	image.image.data = (int *)mlx_get_data_addr(image.image.img, &image.image.bpp, &image.image.size, &image.image.a);
+	image.image.a = 0;
+	while (image.image.a < 1)
+		image.image.data[image.image.a++] = point1.color;
+	mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.image.img, point1.x, point1.y);
+
 	inc = (point2.alt > 128 || point2.alt < 0) ?
 		ft_select_increment(point2) : -0X000002;
 	//d_color = delta_color(point1.color, point2.color, inc, size_l);
@@ -116,7 +126,12 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 			//if (point1.color > point2.color)
 			//	point1.color = point2.color;
 
-			mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color);
+			image.image.img = mlx_new_image(window.mlx_ptr, 1, 1);
+			image.image.data = (int *)mlx_get_data_addr(image.image.img, &image.image.bpp, &image.image.size, &image.image.a);
+			image.image.a = 0;
+			while (image.image.a < 1)
+				image.image.data[image.image.a++] = point1.color;
+			mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.image.img, point1.x, point1.y);
 		}
 	}
 	else
@@ -138,7 +153,13 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 			//if (point1.color > point2.color)
 			//	point1.color = point2.color;
 			//	point1.color += inc;
-			mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color);
+			image.image.img = mlx_new_image(window.mlx_ptr, 1, 1);
+		image.image.data = (int *)mlx_get_data_addr(image.image.img, &image.image.bpp, &image.image.size, &image.image.a);
+			image.image.a = 0;
+			while (image.image.a < 1)
+				image.image.data[image.image.a++] = point1.color;
+			mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.image.img, point1.x, point1.y);
+
 		}
 	}
 }
