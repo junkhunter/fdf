@@ -52,7 +52,7 @@ int		main(int argc, char **argv)
 	t_line	*map;
 	int		fd;
 	float zoom;
-	struct_qui_a_tt tt;
+	//struct_qui_a_tt tt;
 
 	zoom = 2;
 	if (argc > 2)
@@ -61,12 +61,12 @@ int		main(int argc, char **argv)
 	window.win_ptr = mlx_new_window(window.mlx_ptr, W_SIZEX, W_SIZEY, "FDF");
 	if (!(fd = ft_open(argv)))
 		return (0);
-	if (!(tt.map = init_map(window, fd, &zoom)))
+	if (!(map = init_map(window, fd, &zoom)))
 		return (write(1, "<file error>\n", 13) & 0);
-	draw_sqrt(tt.img, tt.map);
-	putimg(tt.img);
+	draw_sqrt(window, map);
+	//putimg(tt.img);
 	make_title(window);
-	mlx_key_hook(window.win_ptr, deal_key, tt);
+	mlx_key_hook(window.win_ptr, deal_key, (void *)0);
 	//mlx_mouse_hook(window.win_ptr, deal_mouse, tt);
 	mlx_loop(window.mlx_ptr);
 }

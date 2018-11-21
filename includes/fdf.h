@@ -40,6 +40,7 @@
  #include <fcntl.h>
 #include "../GNL/get_next_line.h"
 #include <mlx.h>
+
  typedef struct	s_coord
 {
 	int					x;
