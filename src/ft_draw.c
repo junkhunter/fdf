@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 10:43:22 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/20 15:28:24 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/21 15:32:19 by rlucas-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <math.h>
@@ -31,7 +31,7 @@ void    draw_sqrt(t_window window, t_line *lst_map)
 					&& lst_map->point[i + 1].x < W_SIZEX && lst_map->point[i + 1].y < W_SIZEY)
 			{
 				if (lst_map->point[i].alt <= lst_map->point[i + 1].alt)
-					draw_line(lst_map->point[i], lst_map->point[i + 1], window , lst_map->ecart);
+					draw_line(lst_map->point[i], lst_map->point[i + 1], window, lst_map->ecart);
 				else
 					draw_line(lst_map->point[i + 1], lst_map->point[i], window , lst_map->ecart);
 			}
@@ -83,9 +83,9 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 	int			d_color;
 
 	init_var_draw(&var, point1, point2, &size_l);
-	mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color); //put image 
+	mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color); //put image
 	inc = (point2.alt > 128 || point2.alt < 0) ?
-	ft_select_increment(point2) : -0X000002;
+		ft_select_increment(point2) : -0X000002;
 	//d_color = delta_color(point1.color, point2.color, inc, size_l);
 	d_color = point1.color > point2.color;
 	//if (d_color)
@@ -100,9 +100,9 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 			var.erreur += var.dy;
 			if (var.erreur > var.dx)
 			{
-			//	if (point2.alt != point1.alt && point2.alt > -255)
-			//		if (size_l <= 255 || (var.e % 2 == 0))
-			//			point1.color += inc;
+				//	if (point2.alt != point1.alt && point2.alt > -255)
+				//		if (size_l <= 255 || (var.e % 2 == 0))
+				//			point1.color += inc;
 				var.erreur -= var.dx;
 				point1.y += var.yincr;
 			}

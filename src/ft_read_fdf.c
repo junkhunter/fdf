@@ -6,7 +6,7 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 23:07:37 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/20 15:28:19 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/21 15:30:45 by rlucas-d         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ t_line		*init_map(t_window window, int fd, float *zoom)
 	free(lst_map);
 	tmp->next = NULL;
 	calcul_point(begin_lst, ecart / 2, zoom);
+	printf("coucou\n");
 	return (begin_lst);
 }
