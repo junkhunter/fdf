@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 10:43:22 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/21 15:32:19 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/28 16:22:23 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <math.h>
@@ -18,10 +18,19 @@ void	img_put_pixel(int *img, t_coord point)
 	img[(point.y - 100) * W_SIZEX + point.x] = point.color;
 }
 
-void    draw_sqrt(t_window window, t_line *lst_map)
+void	reset_img(t_image image)
+{
+	while (image.size--)
+	{
+		image.data[image.size] = 0;
+	}
+}
+
+void    draw_sqrt(t_all all, t_line *lst_map)
 {
 	int		i;
 
+	reset_img(all.image);
 	while (lst_map)
 	{
 		i = 0;
@@ -31,23 +40,22 @@ void    draw_sqrt(t_window window, t_line *lst_map)
 					&& lst_map->point[i + 1].x < W_SIZEX && lst_map->point[i + 1].y < W_SIZEY)
 			{
 				if (lst_map->point[i].alt <= lst_map->point[i + 1].alt)
-					draw_line(lst_map->point[i], lst_map->point[i + 1], window, lst_map->ecart);
+					draw_line(lst_map->point[i], lst_map->point[i + 1], all, lst_map->ecart);
 				else
-					draw_line(lst_map->point[i + 1], lst_map->point[i], window , lst_map->ecart);
+					draw_line(lst_map->point[i + 1], lst_map->point[i], all , lst_map->ecart);
 			}
 			if (lst_map->next != NULL && lst_map->point[i].x < W_SIZEX && lst_map->point[i].y < W_SIZEY
 					&& lst_map->next->point[i].x < W_SIZEX && lst_map->next->point[i].y < W_SIZEY)
 			{
 				if (lst_map->point[i].alt <= lst_map->next->point[i].alt)
-					draw_line(lst_map->point[i], lst_map->next->point[i], window , lst_map->ecart);
+					draw_line(lst_map->point[i], lst_map->next->point[i], all , lst_map->ecart);
 				else
-					draw_line(lst_map->next->point[i], lst_map->point[i], window , lst_map->ecart);
+					draw_line(lst_map->next->point[i], lst_map->point[i], all , lst_map->ecart);
 			}
 			i++;
 		}
 		lst_map = lst_map->next;
 	}
-
 }
 
 void		init_var_draw(t_var_draw *var, t_coord point1, t_coord point2, int *size_l)
@@ -75,25 +83,14 @@ int			delta_color(int col1 , int col2, int inc, int size_l)
 	return ((i < size_l) ? i : 0);
 }
 
-void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
+void		draw_line(t_coord point1, t_coord point2, t_all all , int ecart)
 {
 	t_var_draw	var;
 	int			inc;
 	int			size_l;
 	int			d_color;
-	t_all		image;
 
 	init_var_draw(&var, point1, point2, &size_l);
-	//mlx_pixel_put(window.mlx_ptr, window.win_ptr, point1.x, point1.y, point1.color); //put image
-	//mlx_new_image(window.mlx_ptr, 1, ,1);
-
-	image.image.img = mlx_new_image(window.mlx_ptr, 1, 1);
-	image.image.data = (int *)mlx_get_data_addr(image.image.img, &image.image.bpp, &image.image.size, &image.image.a);
-	image.image.a = 0;
-	while (image.image.a < 1)
-		image.image.data[image.image.a++] = point1.color;
-	mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.image.img, point1.x, point1.y);
-
 	inc = (point2.alt > 128 || point2.alt < 0) ?
 		ft_select_increment(point2) : -0X000002;
 	//d_color = delta_color(point1.color, point2.color, inc, size_l);
@@ -125,13 +122,7 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 			//		point1.color += inc;*/
 			//if (point1.color > point2.color)
 			//	point1.color = point2.color;
-
-			image.image.img = mlx_new_image(window.mlx_ptr, 1, 1);
-			image.image.data = (int *)mlx_get_data_addr(image.image.img, &image.image.bpp, &image.image.size, &image.image.a);
-			image.image.a = 0;
-			while (image.image.a < 1)
-				image.image.data[image.image.a++] = point1.color;
-			mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.image.img, point1.x, point1.y);
+			img_put_pixel(all.image.data, point1);
 		}
 	}
 	else
@@ -153,13 +144,7 @@ void		draw_line(t_coord point1, t_coord point2, t_window window , int ecart)
 			//if (point1.color > point2.color)
 			//	point1.color = point2.color;
 			//	point1.color += inc;
-			image.image.img = mlx_new_image(window.mlx_ptr, 1, 1);
-		image.image.data = (int *)mlx_get_data_addr(image.image.img, &image.image.bpp, &image.image.size, &image.image.a);
-			image.image.a = 0;
-			while (image.image.a < 1)
-				image.image.data[image.image.a++] = point1.color;
-			mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.image.img, point1.x, point1.y);
-
+			img_put_pixel(all.image.data, point1);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:44:43 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/21 15:32:23 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/28 16:29:24 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void		make_title(t_window window)
 {
 	t_image img;
 
-	img.img = mlx_new_image(window.mlx_ptr, 2550, 120);
+	img.img = mlx_new_image(window.mlx_ptr, 2550, 100);
 	img.data = (int *)mlx_get_data_addr(img.img, &img.bpp, &img.size, &img.a);
 	img.a = 0;
 	while (img.a < 2550 * 100)
@@ -45,15 +45,6 @@ static void		make_title(t_window window)
 	mlx_put_image_to_window(window.mlx_ptr, window.win_ptr, img.img, 0, 0);
 	mlx_string_put(window.mlx_ptr, window.win_ptr, W_SIZEX / 2 - (ft_strlen("FDF")/2 * 10), 35, BLACK, "FDF");
 }
-
-/*void					putimg(t_image image, t_window window, t_line *lst_map)
-{
-	image.data = (int *)mlx_get_data_addr(image.img, &image.bpp, &image.size, &image.a);
-	image.a = 0;
-	while (image.a < 1)
-		image.data[image.a++] = lst_map->point->color;
-	mlx_put_image_to_window (window.mlx_ptr, window.win_ptr, image.img, lst_map->point->x, lst_map->point->y);
-}*/
 
 int						main(int argc, char **argv)
 {
@@ -70,10 +61,12 @@ int						main(int argc, char **argv)
 		return (0);
 	if (!(all.tt.map = init_map(all.wdw, fd, &zoom)))
 		return (write(1, "<file error>\n", 13) & 0);
-	draw_sqrt(all.wdw, all.tt.map);
-	//putimg(all.image, all.wdw, all.tt.map);
+	all.image.img = mlx_new_image(all.wdw.mlx_ptr, W_SIZEX, W_SIZEY - 100);
+	all.image.data = (int *)mlx_get_data_addr(all.image.img, &all.image.bpp, &all.image.size, &all.image.a);
+	draw_sqrt(all, all.tt.map);
+	mlx_put_image_to_window(all.wdw.mlx_ptr, all.wdw.win_ptr, all.image.img, 0/*lst_map->point->x*/, 100/*lst_map->point->y*/);
 	make_title(all.wdw);
-	mlx_key_hook(all.wdw.win_ptr, deal_key, (void *)0);
-	//mlx_mouse_hook(window.win_ptr, deal_mouse, tt);
+	mlx_key_hook(all.wdw.win_ptr, deal_key, &all);
+	mlx_mouse_hook(window.win_ptr, deal_mouse, &all);
 	mlx_loop(all.wdw.mlx_ptr);
 }

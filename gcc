@@ -1,7 +1,1 @@
-
-// maj de la commande
-gcc -I ../minilibx_macos -L ../minilibx_macos ../libft/libft.a ../GNL/get_next_line.c -framework OpenGL fdf.c ft_draw.c ft_read_fdf.c ft_mlx.c ft_color.c -framework OpenGL -framework AppKit -lmlx
-
-/* 
-gcc -I ../minilibx_macos -L ../minilibx_macos ../libft/libft.a ../GNL/get_next_line.c -framework OpenGL fdf.c ft_draw.c ft_read_fdf.c -framework OpenGL -framework AppKit -lmlx
-*/
+gcc -I ../minilibx_macos -L ../minilibx_macos ../libft/libft.a ../GNL/get_next_line.c -framework OpenGL fdf.c ft_draw.c ft_read_fdf.c ft_mlx.c ft_color.c ft_edit_point.c -framework OpenGL -framework AppKit -lmlx

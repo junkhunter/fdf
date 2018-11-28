@@ -6,7 +6,7 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 23:07:37 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/21 15:30:45 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/28 16:01:29 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ float	calcul_zoom(t_line *lst_map)
 				max = abs(lst_map->point[i].alt);
 		}
 		lst_map = lst_map->next;
-}
+	}
 	zoom = 150 / max;
 	if (zoom < 1)
 		zoom = 1;

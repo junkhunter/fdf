@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 14:44:48 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/21 15:32:29 by rlucas-d         ###   ########.fr       */
+/*   Updated: 2018/11/28 16:22:20 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,8 @@ typedef struct	s_all
 int			get_next_line(const int fd, char **line);
 int			deal_key(int key, void *param);
 int			deal_mouse(int button, int x, int y, void *param);
-void		draw_line(t_coord point1, t_coord point2, t_window window ,int ecart);
-void		draw_sqrt(t_window window, t_line *lst_map);
+void		draw_line(t_coord point1, t_coord point2, t_all all ,int ecart);
+void		draw_sqrt(t_all all, t_line *lst_map);
 char		**ft_read_fdf(int fd);
 void		init_point(t_coord *point);
 void		calcul_point(t_line *lst_map, int ecart, float *zoom);
