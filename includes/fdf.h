@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 14:44:48 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/28 16:22:20 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/28 17:05:08 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,6 @@ typedef struct	s_line
 	int				size;
 	t_coord			*point;
 	struct s_line	*next;
-	double			b;
-	unsigned int	ecart;
-	unsigned int	zoom;
 }					t_line;
 
 typedef struct	s_window
@@ -105,12 +102,12 @@ int			get_next_line(const int fd, char **line);
 int			deal_key(int key, void *param);
 int			deal_mouse(int button, int x, int y, void *param);
 void		draw_line(t_coord point1, t_coord point2, t_all all ,int ecart);
-void		draw_sqrt(t_all all, t_line *lst_map);
+void		draw_sqrt(t_all all);
 char		**ft_read_fdf(int fd);
 void		init_point(t_coord *point);
-void		calcul_point(t_line *lst_map, int ecart, float *zoom);
-void		set_point(t_coord *current, t_line *lst_map, t_line zoom);
-t_line		*init_map(t_window window, int fd, float *zoom);
+void		calcul_point(t_param param, int ecart, float *zoom);
+void		set_point(t_coord *current, t_param param);
+t_param		init_map(t_window window, int fd, float *zoom);
 void		ft_color(t_line *lst_map);
 int		ft_select_increment(t_coord	point);
 int		ft_fix_color(t_coord point);

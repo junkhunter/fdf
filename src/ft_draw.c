@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 10:43:22 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/28 16:22:23 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/28 16:59:19 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <math.h>
@@ -21,40 +21,38 @@ void	img_put_pixel(int *img, t_coord point)
 void	reset_img(t_image image)
 {
 	while (image.size--)
-	{
 		image.data[image.size] = 0;
-	}
 }
 
-void    draw_sqrt(t_all all, t_line *lst_map)
+void    draw_sqrt(t_all all)
 {
 	int		i;
 
 	reset_img(all.image);
-	while (lst_map)
+	while (all.tt.map)
 	{
 		i = 0;
-		while(i < lst_map->size)
+		while(i < all.tt.map->size)
 		{
-			if (i < lst_map->size - 1 && lst_map->point[i].x < W_SIZEX && lst_map->point[i].y < W_SIZEY
-					&& lst_map->point[i + 1].x < W_SIZEX && lst_map->point[i + 1].y < W_SIZEY)
+			if (i < all.tt.map->size - 1 && all.tt.map->point[i].x < W_SIZEX && all.tt.map->point[i].y < W_SIZEY
+					&& all.tt.map->point[i + 1].x < W_SIZEX && all.tt.map->point[i + 1].y < W_SIZEY)
 			{
-				if (lst_map->point[i].alt <= lst_map->point[i + 1].alt)
-					draw_line(lst_map->point[i], lst_map->point[i + 1], all, lst_map->ecart);
+				if (all.tt.map->point[i].alt <= all.tt.map->point[i + 1].alt)
+					draw_line(all.tt.map->point[i], all.tt.map->point[i + 1], all, all.tt.ecart);
 				else
-					draw_line(lst_map->point[i + 1], lst_map->point[i], all , lst_map->ecart);
+					draw_line(all.tt.map->point[i + 1], all.tt.map->point[i], all , all.tt.ecart);
 			}
-			if (lst_map->next != NULL && lst_map->point[i].x < W_SIZEX && lst_map->point[i].y < W_SIZEY
-					&& lst_map->next->point[i].x < W_SIZEX && lst_map->next->point[i].y < W_SIZEY)
+			if (all.tt.map->next != NULL && all.tt.map->point[i].x < W_SIZEX && all.tt.map->point[i].y < W_SIZEY
+					&& all.tt.map->next->point[i].x < W_SIZEX && all.tt.map->next->point[i].y < W_SIZEY)
 			{
-				if (lst_map->point[i].alt <= lst_map->next->point[i].alt)
-					draw_line(lst_map->point[i], lst_map->next->point[i], all , lst_map->ecart);
+				if (all.tt.map->point[i].alt <= all.tt.map->next->point[i].alt)
+					draw_line(all.tt.map->point[i], all.tt.map->next->point[i], all , all.tt.ecart);
 				else
-					draw_line(lst_map->next->point[i], lst_map->point[i], all , lst_map->ecart);
+					draw_line(all.tt.map->next->point[i], all.tt.map->point[i], all , all.tt.ecart);
 			}
 			i++;
 		}
-		lst_map = lst_map->next;
+		all.tt.map = all.tt.map->next;
 	}
 }
 
@@ -83,7 +81,7 @@ int			delta_color(int col1 , int col2, int inc, int size_l)
 	return ((i < size_l) ? i : 0);
 }
 
-void		draw_line(t_coord point1, t_coord point2, t_all all , int ecart)
+void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 {
 	t_var_draw	var;
 	int			inc;

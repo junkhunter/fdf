@@ -6,7 +6,7 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 23:07:37 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/28 16:01:29 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/28 17:08:09 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,34 +55,35 @@ float	calcul_zoom(t_line *lst_map)
 # define SIZE_MINX (W_SIZEX - W_SIZEX/100)
 # define SIZE_MINY (W_SIZEY - W_SIZEY/100)
 
-t_line		*init_map(t_window window, int fd, float *zoom)
+t_param		init_map(t_window window, int fd, float *zoom)
 {
-	t_line		*lst_map;
+	t_param		param;	
 	t_line		*begin_lst;
 	t_line		*tmp;
-	int			ecart;
 
-	lst_map = (t_line*)malloc(sizeof(t_line));
-	begin_lst = lst_map;
-	ecart = 100;
-	//lst_map->zoom = *zoom;
+	if (!(param.map = (t_line*)malloc(sizeof(t_line))))
+		return (param);
+	begin_lst = param.map;
+	param.ecart = 100;
+	//map->zoom = *zoom;
 	//*zoom = 6;
-	while ((lst_map->tab = ft_read_fdf(fd)))
+	while ((param.map->tab = ft_read_fdf(fd)))
 	{
-		lst_map->size = 0;
-		while (lst_map->tab[lst_map->size]) //taille de la ligne
-			lst_map->size++;
-		if (ecart * lst_map->size > SIZE_MINY &&
-			 ecart * lst_map->size > SIZE_MINX)
-			ecart = ((SIZE_MINY < SIZE_MINX) ? SIZE_MINX : SIZE_MINY) / (lst_map->size + 1);
-		lst_map->point = (t_coord*)malloc(sizeof(t_coord) * lst_map->size);
-		lst_map->next = (t_line*)malloc(sizeof(t_line));
-		tmp = lst_map;
-		lst_map = lst_map->next;
+		param.map->size = 0;
+		while (param.map->tab[param.map->size]) //taille de la ligne
+			param.map->size++;
+		if (param.ecart * param.map->size > SIZE_MINY &&
+			 param.ecart * param.map->size > SIZE_MINX)
+			param.ecart = ((SIZE_MINY < SIZE_MINX) ? SIZE_MINX : SIZE_MINY) / (param.map->size + 1);
+		param.map->point = (t_coord*)malloc(sizeof(t_coord) * param.map->size);
+		param.map->next = (t_line*)malloc(sizeof(t_line));
+		tmp = param.map;
+		param.map = param.map->next;
 	}
-	free(lst_map);
+	free(param.map);
 	tmp->next = NULL;
-	calcul_point(begin_lst, ecart / 2, zoom);
-	printf("coucou\n");
-	return (begin_lst);
+	calcul_point(param, param.ecart / 2, zoom);
+	//printf("coucou\n");
+	param.map = begin_lst;
+	return (param);
 }

@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:44:43 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/28 16:29:24 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/28 17:08:20 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,15 @@ int						main(int argc, char **argv)
 	all.wdw.win_ptr = mlx_new_window(all.wdw.mlx_ptr, W_SIZEX, W_SIZEY, "FDF");
 	if (!(fd = ft_open(argv)))
 		return (0);
-	if (!(all.tt.map = init_map(all.wdw, fd, &zoom)))
+	all.tt = init_map(all.wdw, fd, &zoom);
+	if (all.tt.map)
 		return (write(1, "<file error>\n", 13) & 0);
 	all.image.img = mlx_new_image(all.wdw.mlx_ptr, W_SIZEX, W_SIZEY - 100);
 	all.image.data = (int *)mlx_get_data_addr(all.image.img, &all.image.bpp, &all.image.size, &all.image.a);
-	draw_sqrt(all, all.tt.map);
+	draw_sqrt(all);
 	mlx_put_image_to_window(all.wdw.mlx_ptr, all.wdw.win_ptr, all.image.img, 0/*lst_map->point->x*/, 100/*lst_map->point->y*/);
 	make_title(all.wdw);
 	mlx_key_hook(all.wdw.win_ptr, deal_key, &all);
-	mlx_mouse_hook(window.win_ptr, deal_mouse, &all);
+	mlx_mouse_hook(all.wdw.win_ptr, deal_mouse, &all);
 	mlx_loop(all.wdw.mlx_ptr);
 }
