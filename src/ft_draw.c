@@ -3,40 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   ft_draw.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/06 10:43:22 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/29 11:45:03 by rhunders         ###   ########.fr       */
+/*   Created: 2018/11/29 18:42:06 by rhunders          #+#    #+#             */
+/*   Updated: 2018/11/29 21:25:11 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <math.h>
 #include <mlx.h>
 #include "../includes/fdf.h"
 
-void	img_put_pixel(int *img, t_coord point, int size)
+void	img_put_pixel(int *img, t_coord point, int size, int color)
 {
-	if (((point.y - 100) * W_SIZEX + point.x) < (W_SIZEY - 100) * W_SIZEX + W_SIZEX && ((point.y - 100) * W_SIZEX + point.x) > 0)
-		img[(point.y - 100) * W_SIZEX + point.x] = point.color;
+	if (((point.y - 100) * W_SIZEX + point.x) < (W_SIZEY - 100) *
+		   W_SIZEX + W_SIZEX && ((point.y - 100) * W_SIZEX + point.x) > 0)
+		img[(point.y - 100) * W_SIZEX + point.x] = color;
 }
 
-void	reset_img(t_image image)
+/*void	reset_img(t_image image)
 {
 	while (image.size--)
 		image.data[image.size] = 0;
 }
-
+*/
 void    draw_sqrt(t_all all)
 {
 	int		i;
 
-	//reset_img(all.image);
 	while (all.tt.map && !(i = 0))
 	{
 		while (i < all.tt.map->size)
 		{
+			//img_put_pixel(all.image.data, all.tt.map->point[i], all.image.size, all.tt.map->point[i].color/*delta_color(nb , point1, point2, var.dx)*/);
+			
 			if (i < all.tt.map->size - 1 && all.tt.map->point[i].x < W_SIZEX && all.tt.map->point[i].y < W_SIZEY
 					&& all.tt.map->point[i + 1].x < W_SIZEX && all.tt.map->point[i + 1].y < W_SIZEY)
 			{
+				
 				if (all.tt.map->point[i].alt <= all.tt.map->point[i + 1].alt)
 					draw_line(all.tt.map->point[i], all.tt.map->point[i + 1], all, all.tt.ecart);
 				else
@@ -56,7 +60,7 @@ void    draw_sqrt(t_all all)
 	}
 }
 
-void		init_var_draw(t_var_draw *var, t_coord point1, t_coord point2, int *size_l)
+void		init_var_draw(t_var_draw *var, t_coord point1, t_coord point2)
 {
 	var->dx = abs(point2.x-point1.x);
 	var->dy = abs(point2.y-point1.y);
@@ -64,22 +68,22 @@ void		init_var_draw(t_var_draw *var, t_coord point1, t_coord point2, int *size_l
 	var->yincr = (point1.y < point2.y) ? 1 : -1;
 	var->erreur = (var->dx > var->dy) ? var->dx / 2 : var->dy /2;
 	var->e = 0;
-	*size_l = sqrt(pow(var->dx, 2) + pow(var->dy, 2));
 }
 
-/*int			delta_color(int col1 , int col2, int inc, int size_l)
+#include <unistd.h>
+
+void		print_bit(int color)
 {
 	int i;
 
-	i = -1;
-	if (col1 > col2)
-		while (++i < size_l && col1 > col2)
-			col1 += inc;
-	else
-		while (++i < size_l && col1 < col2)
-			col1 += inc;
-	return ((i < size_l) ? i : 0);
-}*/
+	i = 32;
+	while (i-- > 0)
+	{
+		if (i % 8 == 0 && i < 31)
+			write(1, " ", 1);
+		write (1, (color & (1 << i)) ? "1": "0", 1);
+	}
+}
 
 int			delta_color(float percent, t_coord point1, t_coord point2, int size_l)
 {
@@ -87,44 +91,33 @@ int			delta_color(float percent, t_coord point1, t_coord point2, int size_l)
 	int blue;
 	int green;
 
-	if (percent < 0.1)
-		return (point1.color);
 	red = 0;
-	green = 0;
 	blue = 0;
-	if ((point2.color & 0xFF0000) - (point1.color & 0xFF0000) > 0)
-		red = (point1.color & 0xFF0000) + (point2.color & 0xFF0000 - (point1.color & 0xFF0000)) * percent;
-	if ((point2.color & 0x00FF00) - (point1.color & 0x00FF00) > 0)
-		blue = (point1.color & 0xFF0000) + (point2.color & 0x00FF00 - (point1.color & 0x00FF00)) * percent;
-	if ((point2.color & 0x0000FF) - (point1.color & 0x0000FF) > 0)
-		green = (point1.color & 0xFF0000) + (point2.color & 0x0000FF - (point1.color & 0x0000FF)) * percent;
-	
-	/*if ((point2.color & 0xFF0000) - (point1.color & 0xFF0000) > 0)
-		red = (point1.color & 0xFF0000) + (point2.color & 0xFF0000 - (point1.color & 0xFF0000)) * percent;
-	if ((point2.color & 0x00FF00) - (point1.color & 0x00FF00) > 0)
-		blue = (point1.color & 0xFF0000) + (point2.color & 0x00FF00 - (point1.color & 0x00FF00)) * percent;
-	if ((point2.color & 0x0000FF) - point1.color & 0x0000FF > 0)
-		green = (point1.color & 0xFF0000) + (point2.color & 0x0000FF - (point1.color & 0x0000FF)) * percent;
-	*/return (red << 16 | blue << 8 | green);
+	green = 0;
+	if (((point1.color >> 16) & 0xFF) < ((point2.color >> 16) & 0xFF))
+		red = ((point1.color >> 16) & 0X0000FF) + (((point2.color >> 16) & 0X0000FF) - ((point1.color >> 16) & 0X0000FF)) * percent;
+	else	
+		red = ((point1.color >> 16) & 0X0000FF) - (((point1.color >> 16) & 0X0000FF) - ((point2.color >> 16) & 0X0000FF)) * percent;
+	if (((point1.color >> 8) & 0xFF) < ((point2.color >> 8) & 0xFF))
+		green = ((point1.color >> 8) & 0X0000FF) + (((point2.color >> 8) & 0X0000FF) - ((point1.color >> 8) & 0X0000FF)) * percent;
+	else
+		green = ((point1.color >> 8) & 0X0000FF) - (((point1.color >> 8) & 0X0000FF) - ((point2.color >> 8) & 0X0000FF)) * percent;
+	if (((point1.color) & 0xFF) < ((point2.color) & 0xFF))
+		blue = (point1.color & 0X0000FF) + (((point2.color & 0X0000FF) - (point1.color & 0X0000FF)) * percent);
+	else
+		blue = (point1.color & 0X0000FF) - (((point1.color & 0X0000FF) - (point2.color & 0X0000FF)) * percent);
+	return ((red << 16) | (green << 8) | (blue));
 }
 
 void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 {
 	t_var_draw	var;
-	int			inc;
-	int			size_l;
-	int			d_color;
 	float		nb;
+	int color;
+	int size_l;
 
-	init_var_draw(&var, point1, point2, &size_l);
-	inc = (point2.alt > 128 || point2.alt < 0) ?
-		ft_select_increment(point2) : -0X000002;
-	//d_color = delta_color(point1.color, point2.color, inc, size_l);
-	d_color = point1.color > point2.color;
-	//if (d_color)
-	//	printf ("%d\n",d_color);
-	//if ((point1.color != point2.color) || (d_color = 0))
-	//	d_color = /*(size_l / */(point2.color - point1.color)/*)*/ / inc;
+	init_var_draw(&var, point1, point2);
+	size_l = sqrt(pow(var.dx, 2) + pow(var.dy, 2));
 	if (var.dx > var.dy)
 	{
 		while ((var.e++) < var.dx)
@@ -133,25 +126,15 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 			var.erreur += var.dy;
 			if (var.erreur > var.dx)
 			{
-				//	if (point2.alt != point1.alt && point2.alt > -255)
-				//		if (size_l <= 255 || (var.e % 2 == 0))
-				//			point1.color += inc;
 				var.erreur -= var.dx;
 				point1.y += var.yincr;
 			}
-			//if (point2.alt > 255 * 2)
-			//	point1.color = 0XFFFFFF;
-			//if ()
-			//	point1.color += inc;
-			//else
-			//	if (point2.alt != point1.alt && point1.color < point2.color)
-			//		point1.color += inc;*/
-			//if (point1.color > point2.color)
-			//	point1.color = point2.color;
-			/*printf("%f\n", ((float)(float)var.e / (float)size_l));
 			nb = ((float)(float)var.e / (float)size_l);
-			point1.color = delta_color(nb , point1, point2, size_l);
-			*/img_put_pixel(all.image.data, point1, all.image.size);
+			if (point1.color ^ point2.color)
+				color = delta_color(nb, point1, point2, size_l);
+			else if (color ^ point1.color)
+				color = point1.color;
+			img_put_pixel(all.image.data, point1, all.image.size, color);
 		}
 	}
 	else
@@ -165,18 +148,13 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 				var.erreur -= var.dy;
 				point1.x += var.xincr;
 			}
-			//if (point2.alt > 256 * 2)
-			//	point1.color = 0XFFFFFF;
-			//else if (point1.alt != point2.alt && (!d_color || !(var.e % d_color)))
-			//	point1.color += inc;
-			//if (point2.alt != point1.alt)
-			//if (point1.color > point2.color)
-			//	point1.color = point2.color;
-			//	point1.color += inc;
-			/*printf("%f\n", ((float)(float)var.e / (float)size_l));
+			///*printf("%f\n", (*/
 			nb = ((float)(float)var.e / (float)size_l);
-			point1.color = delta_color(nb , point1, point2, size_l);
-			*/img_put_pixel(all.image.data, point1, all.image.size);
+			if (point1.color ^ point2.color)
+				color = delta_color(nb, point1, point2, size_l);
+			else if (color ^ point1.color)
+				color = point1.color;
+			img_put_pixel(all.image.data, point1, all.image.size, color);
 		}
 	}
 }

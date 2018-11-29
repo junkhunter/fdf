@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:44:43 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/29 15:04:43 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:42:01 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ static void		make_title(t_window window)
 }
 
 #include <stdio.h>
+# define DEPARTY 300
+# define DEPARTX 1200
 
 int						main(int argc, char **argv)
 {
@@ -60,17 +62,17 @@ int						main(int argc, char **argv)
 	all.wdw.win_ptr = mlx_new_window(all.wdw.mlx_ptr, W_SIZEX, W_SIZEY, "FDF");
 	if (!(fd = ft_open(argv)))
 		return (0);
-	printf("init map ...\n");
 	all.tt = init_map(all.wdw, fd);
-	printf("init map ok\n");
 	if (!all.tt.map)
 		return (write(1, "<file error>\n", 13) & 0);
 	all.image.img = mlx_new_image(all.wdw.mlx_ptr, W_SIZEX, W_SIZEY - 100);
 	all.image.data = (int *)mlx_get_data_addr(all.image.img, &all.image.bpp, &all.image.size, &all.image.a);
 	draw_sqrt(all);
-	printf("draw sqrt ok\n");
 	mlx_put_image_to_window(all.wdw.mlx_ptr, all.wdw.win_ptr, all.image.img, 0, 100);
-	printf("put img ok\n");
+	printf("image put\n");
+					//for (int i = all.tt.centre.y + DEPARTY - 20;i < all.tt.centre.y + DEPARTY + 20; i++)
+// centre de la map //	for (int i2 = all.tt.centre.x + DEPARTX - 20;i2 < all.tt.centre.x + DEPARTX + 20;i2++)
+					//		mlx_pixel_put(all.wdw.mlx_ptr, all.wdw.win_ptr, i2, i, OLIVE);
 	make_title(all.wdw);
 	mlx_key_hook(all.wdw.win_ptr, deal_key, &all);
 	mlx_mouse_hook(all.wdw.win_ptr, deal_mouse, &all);

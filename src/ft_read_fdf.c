@@ -6,7 +6,7 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 23:07:37 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/29 14:43:32 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 20:49:14 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,20 @@ float	calcul_zoom(t_line *lst_map)
 	return (zoom);
 }
 
-# define SIZE_MINX (W_SIZEX - W_SIZEX/100)
-# define SIZE_MINY (W_SIZEY - W_SIZEY/100)
-
-t_coord		set_centre(t_line *lst, int size)
+# define SIZE_MINX (W_SIZEX - W_SIZEX / 100)
+# define SIZE_MINY (W_SIZEY - W_SIZEY / 100)
+# define DEPARTX 1200
+# define DEPARTY 300
+t_coord		set_centre(t_line *lst, int size, int ecart)
 {
-	//t_line *lst;
+	t_coord point;
 
-	//lst = tt->map;
+	size /= 2;
+	point.y = ecart * size;
 	while (size--)	
 		lst = lst->next;
-	return (lst->point[lst->size / 2]);
+	point.x = ecart * (lst->size/2);
+	return (point);
 }
 
 t_param		init_map(t_window window, int fd)
@@ -98,8 +101,10 @@ t_param		init_map(t_window window, int fd)
 	tmp->next = NULL;
 	param.map = begin_lst;
 	if (i > 0)
-		param.centre = set_centre(begin_lst, i / 2);
+		param.centre = set_centre(begin_lst, i, param.ecart / 2);
+	printf ("centre -> x%d y%d\n", param.centre.x + DEPARTX, param.centre.y + DEPARTY);
 	param.zoom = calcul_zoom(param.map);
-	calcul_point(param, param.ecart / 2, &param.zoom);
+	param.ecart /= 2;
+	calcul_point(param, &param.zoom);
 	return (param);
 }

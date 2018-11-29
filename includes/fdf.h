@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 14:44:48 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/29 14:27:40 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 20:47:54 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void		draw_line(t_coord point1, t_coord point2, t_all all ,int ecart);
 void		draw_sqrt(t_all all);
 char		**ft_read_fdf(int fd);
 void		init_point(t_coord *point);
-void		calcul_point(t_param param, int ecart, float *zoom);
+void		calcul_point(t_param param, float *zoom);
 void		set_point(t_coord *current, t_param param);
 t_param		init_map(t_window window, int fd);
 void		ft_color(t_line *lst_map);

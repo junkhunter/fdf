@@ -6,15 +6,15 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/19 01:51:30 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/29 14:35:48 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 21:35:10 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../includes/fdf.h"
 #include <math.h>
-# define DEPARTY 300
-# define DEPARTX 1200
+# define DEPARTY -400
+# define DEPARTX 800
 
 #define limit 255
 
@@ -31,11 +31,11 @@ void		set_point(t_coord *current, t_param param)
 
 	while (++i < param.map->size)
 	{
-		param.map->point[i].alt = ft_atoi(param.map->tab[i]) * param.zoom;
-		param.map->point[i].x = ((current->x /*- (param.map->point[i].alt / 10)*/) * cos(param.b)) - 
-			(((current->y - DEPARTY)) * cos(param.rot));
-		param.map->point[i].y = (current->y - (param.map->point[i].alt)) * sin(param.b) + 
-			((current->x - DEPARTX)) * sin(param.rot);
+		param.map->point[i].alt = ft_atoi(param.map->tab[i]) * 5;
+		//param.map->point[i].x = current->x - param.map->point[i].alt/10 * cos(param.b);
+		//param.map->point[i].y = current->y - param.map->point[i].alt/10 * sin(param.b);
+		param.map->point[i].x = (current->x - current->y) * cos(param.b);
+		param.map->point[i].y = (current->y - param.map->point[i].alt * param.zoom) * sin(param.b) + current->x * sin(param.b);
 		param.map->point[i].color = ft_fix_color(param.map->point[i]);
 		current->x += param.ecart;
 	}
@@ -43,13 +43,13 @@ void		set_point(t_coord *current, t_param param)
 	current->y += param.ecart;
 }
 
-void        calcul_point(t_param param, int ecart, float *zoom)
+void        calcul_point(t_param param, float *zoom)
 {
 	t_coord     current;
 	t_line		*begin_lst;
 
 	begin_lst = param.map;
-	param.ecart = ecart;
+	//param.ecart = ecart;
 	param.departx = DEPARTX;/*(DEPARTX * cos(param.b) - (DEPARTY * cos(param.rot))) +
 	*/ //  	(DEPARTX - (DEPARTX * cos(param.b) - (DEPARTY * cos(param.rot))));
 	current.x = DEPARTX;
