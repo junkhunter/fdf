@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 12:43:17 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/29 14:54:18 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 15:19:59 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,20 @@ void	make_change(t_all *all)
 		mlx_put_image_to_window(all->wdw.mlx_ptr, all->wdw.win_ptr, all->image.img, 0,100);
 }
 
+int			ft_bigger(int val1, int val2)
+{
+	return ((val1 < val2) ? val2: val1);
+}
+
 int			deal_mouse(int button, int x, int y, void *param)
 {
-	t_all all;
-	
-	all = *((t_all*)param);
 	if (button == 5 || button == 4)
 	{
-		(*(t_all*)param).tt.ecart += -3 * (button == 5) + 3 * (button == 4);
-		if ((*(t_all*)param).tt.ecart <= 0)
-			(*(t_all*)param).tt.ecart = 1;
+		(*(t_all*)param).tt.ecart += -2 * (button == 5) + 2 * (button == 4);
+		(*(t_all*)param).tt.ecart = ft_bigger(1, (*(t_all*)param).tt.ecart);
 		make_change(param);
 	}
+
 /*	ft_putnbr(button);
 	ft_putnbr(x);
 	ft_putnbr(y);*/
