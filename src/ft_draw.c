@@ -6,16 +6,17 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 10:43:22 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/28 16:59:19 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 11:45:03 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <math.h>
 #include <mlx.h>
 #include "../includes/fdf.h"
 
-void	img_put_pixel(int *img, t_coord point)
+void	img_put_pixel(int *img, t_coord point, int size)
 {
-	img[(point.y - 100) * W_SIZEX + point.x] = point.color;
+	if (((point.y - 100) * W_SIZEX + point.x) < (W_SIZEY - 100) * W_SIZEX + W_SIZEX && ((point.y - 100) * W_SIZEX + point.x) > 0)
+		img[(point.y - 100) * W_SIZEX + point.x] = point.color;
 }
 
 void	reset_img(t_image image)
@@ -28,11 +29,10 @@ void    draw_sqrt(t_all all)
 {
 	int		i;
 
-	reset_img(all.image);
-	while (all.tt.map)
+	//reset_img(all.image);
+	while (all.tt.map && !(i = 0))
 	{
-		i = 0;
-		while(i < all.tt.map->size)
+		while (i < all.tt.map->size)
 		{
 			if (i < all.tt.map->size - 1 && all.tt.map->point[i].x < W_SIZEX && all.tt.map->point[i].y < W_SIZEY
 					&& all.tt.map->point[i + 1].x < W_SIZEX && all.tt.map->point[i + 1].y < W_SIZEY)
@@ -67,7 +67,7 @@ void		init_var_draw(t_var_draw *var, t_coord point1, t_coord point2, int *size_l
 	*size_l = sqrt(pow(var->dx, 2) + pow(var->dy, 2));
 }
 
-int			delta_color(int col1 , int col2, int inc, int size_l)
+/*int			delta_color(int col1 , int col2, int inc, int size_l)
 {
 	int i;
 
@@ -79,6 +79,33 @@ int			delta_color(int col1 , int col2, int inc, int size_l)
 		while (++i < size_l && col1 < col2)
 			col1 += inc;
 	return ((i < size_l) ? i : 0);
+}*/
+
+int			delta_color(float percent, t_coord point1, t_coord point2, int size_l)
+{
+	int red;
+	int blue;
+	int green;
+
+	if (percent < 0.1)
+		return (point1.color);
+	red = 0;
+	green = 0;
+	blue = 0;
+	if ((point2.color & 0xFF0000) - (point1.color & 0xFF0000) > 0)
+		red = (point1.color & 0xFF0000) + (point2.color & 0xFF0000 - (point1.color & 0xFF0000)) * percent;
+	if ((point2.color & 0x00FF00) - (point1.color & 0x00FF00) > 0)
+		blue = (point1.color & 0xFF0000) + (point2.color & 0x00FF00 - (point1.color & 0x00FF00)) * percent;
+	if ((point2.color & 0x0000FF) - (point1.color & 0x0000FF) > 0)
+		green = (point1.color & 0xFF0000) + (point2.color & 0x0000FF - (point1.color & 0x0000FF)) * percent;
+	
+	/*if ((point2.color & 0xFF0000) - (point1.color & 0xFF0000) > 0)
+		red = (point1.color & 0xFF0000) + (point2.color & 0xFF0000 - (point1.color & 0xFF0000)) * percent;
+	if ((point2.color & 0x00FF00) - (point1.color & 0x00FF00) > 0)
+		blue = (point1.color & 0xFF0000) + (point2.color & 0x00FF00 - (point1.color & 0x00FF00)) * percent;
+	if ((point2.color & 0x0000FF) - point1.color & 0x0000FF > 0)
+		green = (point1.color & 0xFF0000) + (point2.color & 0x0000FF - (point1.color & 0x0000FF)) * percent;
+	*/return (red << 16 | blue << 8 | green);
 }
 
 void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
@@ -87,6 +114,7 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 	int			inc;
 	int			size_l;
 	int			d_color;
+	float		nb;
 
 	init_var_draw(&var, point1, point2, &size_l);
 	inc = (point2.alt > 128 || point2.alt < 0) ?
@@ -111,8 +139,8 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 				var.erreur -= var.dx;
 				point1.y += var.yincr;
 			}
-			if (point2.alt > 255 * 2)
-				point1.color = 0XFFFFFF;
+			//if (point2.alt > 255 * 2)
+			//	point1.color = 0XFFFFFF;
 			//if ()
 			//	point1.color += inc;
 			//else
@@ -120,7 +148,10 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 			//		point1.color += inc;*/
 			//if (point1.color > point2.color)
 			//	point1.color = point2.color;
-			img_put_pixel(all.image.data, point1);
+			/*printf("%f\n", ((float)(float)var.e / (float)size_l));
+			nb = ((float)(float)var.e / (float)size_l);
+			point1.color = delta_color(nb , point1, point2, size_l);
+			*/img_put_pixel(all.image.data, point1, all.image.size);
 		}
 	}
 	else
@@ -134,15 +165,18 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 				var.erreur -= var.dy;
 				point1.x += var.xincr;
 			}
-			if (point2.alt > 256 * 2)
-				point1.color = 0XFFFFFF;
-			else if (point1.alt != point2.alt && (!d_color || !(var.e % d_color)))
-				point1.color += inc;
+			//if (point2.alt > 256 * 2)
+			//	point1.color = 0XFFFFFF;
+			//else if (point1.alt != point2.alt && (!d_color || !(var.e % d_color)))
+			//	point1.color += inc;
 			//if (point2.alt != point1.alt)
 			//if (point1.color > point2.color)
 			//	point1.color = point2.color;
 			//	point1.color += inc;
-			img_put_pixel(all.image.data, point1);
+			/*printf("%f\n", ((float)(float)var.e / (float)size_l));
+			nb = ((float)(float)var.e / (float)size_l);
+			point1.color = delta_color(nb , point1, point2, size_l);
+			*/img_put_pixel(all.image.data, point1, all.image.size);
 		}
 	}
 }

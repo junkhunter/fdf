@@ -6,7 +6,7 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 23:07:37 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/28 17:08:09 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 14:43:32 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ char		**ft_read_fdf(int fd)
 	}
 	return (NULL);
 }
+
+#include <stdio.h>
 
 float	calcul_zoom(t_line *lst_map)
 {
@@ -55,18 +57,29 @@ float	calcul_zoom(t_line *lst_map)
 # define SIZE_MINX (W_SIZEX - W_SIZEX/100)
 # define SIZE_MINY (W_SIZEY - W_SIZEY/100)
 
-t_param		init_map(t_window window, int fd, float *zoom)
+t_coord		set_centre(t_line *lst, int size)
+{
+	//t_line *lst;
+
+	//lst = tt->map;
+	while (size--)	
+		lst = lst->next;
+	return (lst->point[lst->size / 2]);
+}
+
+t_param		init_map(t_window window, int fd)
 {
 	t_param		param;	
 	t_line		*begin_lst;
 	t_line		*tmp;
+	int			i;
 
-	if (!(param.map = (t_line*)malloc(sizeof(t_line))))
+	if (!(param.map = (t_line*)malloc(sizeof(t_line))) || (i = 0))
 		return (param);
 	begin_lst = param.map;
 	param.ecart = 100;
-	//map->zoom = *zoom;
-	//*zoom = 6;
+	param.b = 0.5;
+	param.rot = 0.5;
 	while ((param.map->tab = ft_read_fdf(fd)))
 	{
 		param.map->size = 0;
@@ -79,11 +92,14 @@ t_param		init_map(t_window window, int fd, float *zoom)
 		param.map->next = (t_line*)malloc(sizeof(t_line));
 		tmp = param.map;
 		param.map = param.map->next;
+		i++;
 	}
 	free(param.map);
 	tmp->next = NULL;
-	calcul_point(param, param.ecart / 2, zoom);
-	//printf("coucou\n");
 	param.map = begin_lst;
+	if (i > 0)
+		param.centre = set_centre(begin_lst, i / 2);
+	param.zoom = calcul_zoom(param.map);
+	calcul_point(param, param.ecart / 2, &param.zoom);
 	return (param);
 }

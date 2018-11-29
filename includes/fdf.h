@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 14:44:48 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/28 17:05:08 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 14:27:40 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,13 @@ typedef struct	s_param
 {
 	t_line			*map;
 	t_window		window;
+	t_coord			centre;
 	unsigned int	ecart;
 	float			zoom;
 	double			b;
+	double			rot;
+	double			roty;
+	int				departx;
 }					t_param;
 
 typedef struct	s_var_draw
@@ -107,7 +111,7 @@ char		**ft_read_fdf(int fd);
 void		init_point(t_coord *point);
 void		calcul_point(t_param param, int ecart, float *zoom);
 void		set_point(t_coord *current, t_param param);
-t_param		init_map(t_window window, int fd, float *zoom);
+t_param		init_map(t_window window, int fd);
 void		ft_color(t_line *lst_map);
 int		ft_select_increment(t_coord	point);
 int		ft_fix_color(t_coord point);

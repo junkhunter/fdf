@@ -6,56 +6,57 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/15 12:43:17 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/28 17:07:52 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 14:54:18 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/fdf.h"
 #include <mlx.h>
 
+void	make_change(t_all *all)
+{
+		calcul_point(all->tt, all->tt.ecart / 2, &all->tt.zoom);
+		mlx_destroy_image(all->wdw.mlx_ptr, all->image.img);
+		all->image.img = mlx_new_image(all->wdw.mlx_ptr, W_SIZEX, W_SIZEY - 100);
+		all->image.data = (int *)mlx_get_data_addr(all->image.img, &all->image.bpp, &all->image.size, &all->image.a);
+		draw_sqrt(*all);
+		mlx_put_image_to_window(all->wdw.mlx_ptr, all->wdw.win_ptr, all->image.img, 0,100);
+}
+
 int			deal_mouse(int button, int x, int y, void *param)
 {
-	t_image	img;
-
-/*	if (button == 5 || button == 4)
+	t_all all;
+	
+	all = *((t_all*)param);
+	if (button == 5 || button == 4)
 	{
-		((t_param*)param)->map->zoom += -1 + ((button - 4) * 2);
-		calcul_point(((t_param*)param)->map,
-			   	((t_param*)param)->ecart, ((t_param*)param)->zoom);
-		img.img = mlx_new_image(((t_param*)param)->window.mlx_ptr,
-			((t_param*)param)->window.win_ptr,W_SIZEX,
-		   	W_SIZEY - 100);
-		img.data = (int *)mlx_get_data_addr(img.img, &img.bpp,
-			&img.size, &img.a);
-		img.a = 0;
-		//while (img.a)
-	}*/
-	ft_putnbr(button);
+		(*(t_all*)param).tt.ecart += -3 * (button == 5) + 3 * (button == 4);
+		if ((*(t_all*)param).tt.ecart <= 0)
+			(*(t_all*)param).tt.ecart = 1;
+		make_change(param);
+	}
+/*	ft_putnbr(button);
 	ft_putnbr(x);
-	ft_putnbr(y);
-	ft_putendl("");
+	ft_putnbr(y);*/
+	ft_putendl("ici");
 	return(0);
 }
 
 int			deal_key(int key, void *param)
 {
-	t_all all;
-
-	all = *((t_all*)param);
+	ft_putendl("la");
 	ft_putnbr(key);
 	if (key == 53)
 		exit(0);
 	else if (key == 126 || key == 125)
 	{
-		if (all.tt.zoom > 0 || key == 126)
-			all.tt.zoom += -1 + ((key - 125) * 2);
-		calcul_point(all.tt, all.tt.ecart, &all.tt.zoom);
-		draw_sqrt(all);
-		mlx_put_image_to_window(all.wdw.mlx_ptr, all.wdw.win_ptr, all.image.img, 0,100);
+		(*(t_all*)param).tt.zoom += -(float)(key == 125) * 0.2 + (float)(key == 126) * 0.2;
+		make_change((t_all*)param);
 	}
-	/*else if (key == 125)
+	else if (key == 123 || key == 124)
 	{
-		*(int*)param -= 1;
-	}*/
+		(*(t_all*)param).tt.rot += -0.05 * (key == 124) + 0.05 * (key == 123);
+		make_change((t_all*)param);
+	}
 	return (0);
 }

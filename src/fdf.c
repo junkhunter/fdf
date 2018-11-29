@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 15:44:43 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/28 17:08:20 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/11/29 15:04:43 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,31 @@ static void		make_title(t_window window)
 	mlx_string_put(window.mlx_ptr, window.win_ptr, W_SIZEX / 2 - (ft_strlen("FDF")/2 * 10), 35, BLACK, "FDF");
 }
 
+#include <stdio.h>
+
 int						main(int argc, char **argv)
 {
 	int		fd;
-	float zoom;
 	t_all		all;
 
-	zoom = 2;
+	all.tt.zoom = 2;
 	if (argc > 2)
 		return (write (1, "usage <filename>\n", 17) & 0);
 	all.wdw.mlx_ptr = mlx_init();
 	all.wdw.win_ptr = mlx_new_window(all.wdw.mlx_ptr, W_SIZEX, W_SIZEY, "FDF");
 	if (!(fd = ft_open(argv)))
 		return (0);
-	all.tt = init_map(all.wdw, fd, &zoom);
-	if (all.tt.map)
+	printf("init map ...\n");
+	all.tt = init_map(all.wdw, fd);
+	printf("init map ok\n");
+	if (!all.tt.map)
 		return (write(1, "<file error>\n", 13) & 0);
 	all.image.img = mlx_new_image(all.wdw.mlx_ptr, W_SIZEX, W_SIZEY - 100);
 	all.image.data = (int *)mlx_get_data_addr(all.image.img, &all.image.bpp, &all.image.size, &all.image.a);
 	draw_sqrt(all);
-	mlx_put_image_to_window(all.wdw.mlx_ptr, all.wdw.win_ptr, all.image.img, 0/*lst_map->point->x*/, 100/*lst_map->point->y*/);
+	printf("draw sqrt ok\n");
+	mlx_put_image_to_window(all.wdw.mlx_ptr, all.wdw.win_ptr, all.image.img, 0, 100);
+	printf("put img ok\n");
 	make_title(all.wdw);
 	mlx_key_hook(all.wdw.win_ptr, deal_key, &all);
 	mlx_mouse_hook(all.wdw.win_ptr, deal_mouse, &all);
