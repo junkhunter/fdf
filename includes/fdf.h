@@ -6,7 +6,7 @@
 /*   By: rlucas-d <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/05 14:44:48 by rlucas-d          #+#    #+#             */
-/*   Updated: 2018/11/29 20:47:54 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/12/03 03:31:38 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,12 @@
 //# define ECART 6 /*ecart calculer*/
 # define W_SIZEX 2550
 # define W_SIZEY 1320
+# define DEPARTX W_SIZEX / 2
+# define DEPARTY 300
+
 # include "../libft/includes/libft.h"
+# include "Keycode.h"
+
 /*couleur de base*/
 # define RED    0XFF0000
 # define GREEN  0X00FF00
@@ -54,6 +59,7 @@ typedef struct	s_line
 	char			**tab;
 	int				size;
 	t_coord			*point;
+	t_coord			*distance;
 	struct s_line	*next;
 }					t_line;
 
@@ -66,14 +72,26 @@ typedef struct	s_window
 typedef struct	s_param
 {
 	t_line			*map;
+	t_line			*l_centre;
 	t_window		window;
 	t_coord			centre;
+	
 	unsigned int	ecart;
+	int				max;
 	float			zoom;
 	double			b;
 	double			rot;
 	double			roty;
+	int				d_departx;
+	int				d_departy;
 	int				departx;
+	int				departy;
+	int				max_color;
+	int				min_color;
+	int				gnd_color;
+	int				n_mid_color;
+	int				p_mid_color;
+	int				lst_size;
 }					t_param;
 
 typedef struct	s_var_draw
@@ -100,21 +118,30 @@ typedef struct	s_all
 	t_param		tt;
 	t_image		image;
 	t_window	wdw;
+	int				press;
+	int				last_x;
+	int				last_y;
 }				t_all;
 
+void		calcul_centre(t_param *param);
 int			get_next_line(const int fd, char **line);
 int			deal_key(int key, void *param);
 int			deal_mouse(int button, int x, int y, void *param);
+int         release_btn(int button, int x, int y, void *param);
 void		draw_line(t_coord point1, t_coord point2, t_all all ,int ecart);
 void		draw_sqrt(t_all all);
-char		**ft_read_fdf(int fd);
+//char		**ft_read_fdf(int fd);
+int			ft_read_fdf(int fd, t_param *param);
 void		init_point(t_coord *point);
-void		calcul_point(t_param param, float *zoom);
-void		set_point(t_coord *current, t_param param);
+void		calcul_point(t_param *param, float *zoom);
+int         deal_mouse2(int x, int y, void *param);
+void		set_point(t_coord *current, t_param *param);
 t_param		init_map(t_window window, int fd);
 void		ft_color(t_line *lst_map);
-int		ft_select_increment(t_coord	point);
-int		ft_fix_color(t_coord point);
-float	calcul_zoom(t_line *lst_map);
+int			ft_select_increment(t_coord	point);
+void		ft_fix_color(t_coord *point, t_param *param); // bon
+//int			ft_fix_color(t_coord point); // mauvais
+void		calcul_zoom(t_param *param, int lst_size);
+void        ft_draw_square(t_coord point, int size, int color,t_all *all);
 
 #endif

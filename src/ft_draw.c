@@ -6,7 +6,7 @@
 /*   By: rhunders <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/29 18:42:06 by rhunders          #+#    #+#             */
-/*   Updated: 2018/11/29 21:25:11 by rhunders         ###   ########.fr       */
+/*   Updated: 2018/12/02 22:36:31 by rhunders         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 void	img_put_pixel(int *img, t_coord point, int size, int color)
 {
-	if (((point.y - 100) * W_SIZEX + point.x) < (W_SIZEY - 100) *
-		   W_SIZEX + W_SIZEX && ((point.y - 100) * W_SIZEX + point.x) > 0)
+		if (point.y > 100 && point.y < W_SIZEY &&
+		point.x >= 0 && point.x <= W_SIZEX)
 		img[(point.y - 100) * W_SIZEX + point.x] = color;
 }
 
@@ -130,9 +130,9 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 				point1.y += var.yincr;
 			}
 			nb = ((float)(float)var.e / (float)size_l);
-			if (point1.color ^ point2.color)
+			if (point1.color != point2.color)
 				color = delta_color(nb, point1, point2, size_l);
-			else if (color ^ point1.color)
+			else if (color != point1.color)
 				color = point1.color;
 			img_put_pixel(all.image.data, point1, all.image.size, color);
 		}
@@ -148,13 +148,12 @@ void		draw_line(t_coord point1, t_coord point2, t_all all, int ecart)
 				var.erreur -= var.dy;
 				point1.x += var.xincr;
 			}
-			///*printf("%f\n", (*/
 			nb = ((float)(float)var.e / (float)size_l);
-			if (point1.color ^ point2.color)
+			if (point1.color != point2.color)
 				color = delta_color(nb, point1, point2, size_l);
-			else if (color ^ point1.color)
+			else if (color != point1.color)
 				color = point1.color;
-			img_put_pixel(all.image.data, point1, all.image.size, color);
+						img_put_pixel(all.image.data, point1, all.image.size, color);
 		}
 	}
 }
